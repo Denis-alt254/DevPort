@@ -115,8 +115,8 @@ Pull requests are welcome! If you'd like to contribute, fork the repo and make y
 This project is licensed under the MIT License.
 
 👨‍💻 Creator
-Built with 💻 by [Your Name]
-Connect on GitHub: @yourusername
+Built with 💻 by Denis Kipkurui
+Connect on GitHub: https://github.com/Denis-alt254
 
 ---
 

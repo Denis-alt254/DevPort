@@ -9,6 +9,9 @@ connectDB();
 PORT = 5000;
 app.use(express.json());
 
+// Serve static files from the public directory
+app.use(express.static('public'));
+
 app.listen(process.env.PORT|| PORT, (req, res) => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

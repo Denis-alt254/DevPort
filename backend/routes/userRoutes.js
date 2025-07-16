@@ -8,6 +8,7 @@ const User = require('../model/User');
 const saltRounds= 10;
 
 const connectDB = require('../config/db');
+const { default: mongoose } = require('mongoose');
 const secretKey = process.env.JWT_SECRET
 
 router.post('/register', async(req, res) => {
@@ -73,5 +74,24 @@ router.post('/login', authMiddleware, async(req, res) => {
         res.status(500).json({error: "Internal Server Error."});
     }
 });
+
+router.get('/:id', async(req, res) => {
+    const {id} = req.params;
+
+    //validate it is a proper id format in mongodb
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'Invalid user id format'})
+    }
+    try {
+        const user = await User.findById(id).exec();
+        if(!user){
+            return res.status(404).json('user not found');
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user', error);
+        res.status(500).json({error: 'Server Error'});
+    }
+})
 
 module.exports = router;

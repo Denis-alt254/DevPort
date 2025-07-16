@@ -75,7 +75,7 @@ router.post('/login', authMiddleware, async(req, res) => {
     }
 });
 
-router.get('/:id', async(req, res) => {
+router.get('/:id', authMiddleware,async(req, res) => {
     const {id} = req.params;
 
     //validate it is a proper id format in mongodb
@@ -92,6 +92,30 @@ router.get('/:id', async(req, res) => {
         console.error('Error fetching user', error);
         res.status(500).json({error: 'Server Error'});
     }
-})
+});
+
+router.put('/update-profile/:id', authMiddleware, async(req, res) => {
+    const {id} = req.params;
+    const updateData = req.body;
+
+    //validate if proper format is followed
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({error: 'Invalid user id format'})
+    }
+
+    try {
+        const updateUser = await User.findByIdAndUpdate(id, {$set: updateData}, {
+            new: true,
+            runValidators: true,
+        }).exec();
+        if(!updateUser){
+            return res.status(404).json('User not found');
+        }
+        res.json(updateUser);
+    } catch (error) {
+        console.error('Error updating user', error);
+        res.status(500).json({error: 'Serer Error.'});
+    }
+});
 
 module.exports = router;

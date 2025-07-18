@@ -118,4 +118,26 @@ router.put('/update-profile/:id', authMiddleware, async(req, res) => {
     }
 });
 
+router.post('/follow/:id', authMiddleware, async(req, res) => {
+    const userId = req.body._id;
+    const targetId = req.params.id;
+
+    if(userId === targetId) return res.status(400).send("Can't follow yourself");
+
+    await User.findByIdAndUpdate(userId, {$addToSet: {following: targetId}});
+    await User.findByIdAndUpdate(targetId, {$addToSet: {followers: userId}});
+
+    res.send('Followed successfully');
+});
+
+router.get('/:id/followers', async(req, res) => {
+    const user = await User.findById(req.params.id).populate('followers', 'username');
+    res.json(user.followers);
+});
+
+router.get('/:id/following', async(req, res) => {
+    const user = await User.findById(req.params.id).populate('following', 'username');
+    res.json(user.following);
+});
+
 module.exports = router;

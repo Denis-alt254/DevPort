@@ -140,4 +140,26 @@ router.get('/:id/following', async(req, res) => {
     res.json(user.following);
 });
 
+router.post('/:id/endorse', async(req, res) => {
+    const { id } = req.params;
+    const { skill } = req.body;
+
+    const user = await User.findById(id);
+
+    const skillExist = user.endorsements.some(
+        e => e.skill.toLowerCase() === skill.toLowerCase()
+    );
+
+    if(skillExist){
+        skillExist.count += 1;
+        return res.status(400).json({message: 'Skill Already Exist.'});
+    }else{
+            user.endorsements.push({ skill, count: 1});
+    }
+
+    await user.save();
+
+    return res.status(200).json({message: `Endorsed ${skill} successfully.`});
+});
+
 module.exports = router;

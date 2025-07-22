@@ -10,8 +10,8 @@ export const SignIn = async(data) => {
     return res.data;
 }
 
-export const GetUser = async(id) => {
-    const res = await API.get(`/users/${id}`);
+export const GetUser = async() => {
+    const res = await API.get(`/users/me`);
     return res.data;
 }
 

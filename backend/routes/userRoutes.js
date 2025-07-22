@@ -7,7 +7,6 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const User = require('../model/User');
 const saltRounds= 10;
 
-const connectDB = require('../config/db');
 const { default: mongoose } = require('mongoose');
 const secretKey = process.env.JWT_SECRET
 
@@ -75,22 +74,24 @@ router.post('/login', async(req, res) => {
     }
 });
 
-router.get('/:id', authMiddleware,async(req, res) => {
-    const {id} = req.params;
-
+router.get('/me', authMiddleware,async(req, res) => {
+    const userId = req.user.userId;
+    console.log(userId);
     //validate it is a proper id format in mongodb
-    if(!mongoose.Types.ObjectId.isValid(id)){
+    if(!mongoose.Types.ObjectId.isValid(userId)){
         return res.status(400).json({error: 'Invalid user id format'})
     }
     try {
-        const user = await User.findById(id).exec();
+        const user = await User.findById(userId);
         if(!user){
             return res.status(404).json('user not found');
         }
         res.json(user);
     } catch (error) {
         console.error('Error fetching user', error);
-        res.status(500).json({error: 'Server Error'});
+        if(!res.headersSent){
+            res.status(500).json({error: 'Server Error'});
+        }
     }
 });
 

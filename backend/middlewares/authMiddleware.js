@@ -7,6 +7,7 @@ function authMiddleware(req, res, next){
 
     //Check Bearer token
     const token = authHeader && authHeader.split(' ')[1];
+    console.log("Token: ", token);
     if(!token){
         return res.status(401).json({error: "Access denied. No token provided."});
     }
@@ -14,6 +15,10 @@ function authMiddleware(req, res, next){
     try {
         //verify token
         const decoded = jwt.verify(token, secretKey);
+        if(!decoded || !decoded._id){
+            return res.status(403).json({error: 'Invalid payload'});
+        }
+        console.log('decode payload: ', decoded)
         req.user = decoded;
         next();
     } catch (error) {

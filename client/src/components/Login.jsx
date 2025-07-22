@@ -16,7 +16,7 @@ export default function Login(){
         try {
             const data = await SignIn(form);
             localStorage.setItem('token', data.token);
-            navigate('/dashboard');
+            navigate('/dashboard', { state: { user: data.user } });
         } catch (error) {
             setError(error.response?.data?.error || 'Login Failed')
         }

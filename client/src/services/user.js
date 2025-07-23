@@ -11,13 +11,15 @@ export const SignIn = async(data) => {
 }
 
 export const GetUser = async() => {
-    const res = await API.get(`/users/me`);
-    return res.data;
+    return await API.get('/users/me');
 }
 
-export const UpdateProfile = async(id, data) => {
-    const res = await API.put(`/update-profile/${id}`, data);
-    return res.data;
+export const UpdateProfile = async(data) => {
+    try {
+        return await API.put('/users/update-profile', data);
+    } catch (error) {
+        console.error({message: error.message});
+    }
 }
 
 export const Follow = async(id, data) => {

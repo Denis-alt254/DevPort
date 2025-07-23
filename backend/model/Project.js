@@ -8,5 +8,5 @@ const ProjectSchema = new mongoose.Schema({
     imageUrl: String,
     techStack: [{type: String}]
 }, {timestamps: true});
-
+    
 module.exports = mongoose.model('Project', ProjectSchema);

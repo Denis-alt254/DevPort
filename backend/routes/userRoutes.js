@@ -76,13 +76,12 @@ router.post('/login', async(req, res) => {
 
 router.get('/me', authMiddleware,async(req, res) => {
     const userId = req.user.userId;
-    console.log(userId);
     //validate it is a proper id format in mongodb
     if(!mongoose.Types.ObjectId.isValid(userId)){
         return res.status(400).json({error: 'Invalid user id format'})
     }
     try {
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).exec();
         if(!user){
             return res.status(404).json('user not found');
         }
@@ -95,9 +94,10 @@ router.get('/me', authMiddleware,async(req, res) => {
     }
 });
 
-router.put('/update-profile/:id', authMiddleware, async(req, res) => {
-    const {id} = req.params;
+router.put('/update-profile', authMiddleware, async(req, res) => {
+    const id = req.user.userId;
     const updateData = req.body;
+    console.log('Updated Data: ', updateData);
 
     //validate if proper format is followed
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -115,7 +115,9 @@ router.put('/update-profile/:id', authMiddleware, async(req, res) => {
         res.json(updateUser);
     } catch (error) {
         console.error('Error updating user', error);
-        res.status(500).json({error: 'Serer Error.'});
+        if(!res.headersSent){
+            res.status(500).json({error: 'Server Error'}, error.message);
+        }
     }
 });
 

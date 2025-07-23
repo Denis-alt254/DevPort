@@ -1,9 +1,14 @@
 const { default: mongoose } = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-    username: String,
+    username: {type: String, required: true, unique: true},
     password: String,
-    email: String, 
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/ 
+    }, 
     bio: String,
     profilePicUrl: String,
     socialLinks: {
@@ -13,8 +18,8 @@ const UserSchema = new mongoose.Schema({
     },
     skills: [String],
     endorsements: [{
-        skill: String,
-        count: Number
+        skill: {type: String, required: true},
+        count: {type: Number}
     }],
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]

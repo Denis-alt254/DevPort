@@ -11,7 +11,7 @@ const { default: mongoose } = require('mongoose');
 const secretKey = process.env.JWT_SECRET
 
 router.post('/register', async(req, res) => {
-    const {username, password} = req.body;
+    const {username, password, email} = req.body;
 
     if(!username || !password){
         return res.status(400).json({error: "username and password are required."});
@@ -30,10 +30,17 @@ router.post('/register', async(req, res) => {
         const newUser = new User({
             username,
             password: hashedPassword,
-            createdAt: new Date()
+            email,
         });
         const savedUser = await newUser.save();
         res.status(201).json({message: "User registered successfully", userId: savedUser._id});
+        //create JWT payload
+        const payload = {userId: savedUser._id, username: savedUser.username};
+
+        //Sign token
+        const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+
+        res.status(200).json({message: "Login Successful.", token});
     } catch (error) {
         console.error("Registration error", error);
         res.status(500).json({error: "Internal Server Error."});

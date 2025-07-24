@@ -11,8 +11,8 @@ const getAllProjects = async(req, res) => {
 
 const getProjectsByUser = async(req, res) => {
     try {
-        const userId = req.params.userId;
-        const projects = await Project.find({userId: userId}).populate('user', 'username');
+        const userId = req.user.userId;
+        const projects = await Project.find({userId: userId});
         res.status(200).json(projects);
     } catch (error) {
         res.status(500).json({error: 'Error fetching projects'})
@@ -21,16 +21,16 @@ const getProjectsByUser = async(req, res) => {
 
 const creatProject = async(req, res) => {
     try {
-        const {userId, title, description, githubUrl, imageUrl, techStack} = req.body;
+        const {userId = req.user.userId, title, description, githubUrl, imageUrl, techStack} = req.body;
         if(!title){
             return res.status(400).json("Title should be provided.")
         }   
         
         //get user id for authenticated request
-        const userid = req.user._id;
+        //const userId = req.user.userId;
 
         const newProject = new Project({
-            userId:userid, title, description, githubUrl, imageUrl, techStack
+            userId, title, description, githubUrl, imageUrl, techStack
         });
         const savedProject = await newProject.save();
         res.status(201).json(savedProject);

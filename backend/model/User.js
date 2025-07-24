@@ -11,12 +11,16 @@ const UserSchema = new mongoose.Schema({
     }, 
     bio: String,
     profilePicUrl: String,
+    role: String,
+    location: String,
     socialLinks: {
         github: String,
         linkedin: String,
         twitter: String
     },
-    skills: [String],
+    skills: [{
+        name: {type: String}
+    }],
     endorsements: [{
         skill: {type: String, required: true},
         count: {type: Number}

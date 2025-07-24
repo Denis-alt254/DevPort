@@ -1,13 +1,11 @@
 import API from "./api"
 
 export const GetAllProjects = async() => {
-    const res = await API.get('/projects/');
-    return res.data;
+    return await API.get('/projects/');
 }
 
-export const GetProjectsByUser = async(userId) => {
-    const res = await API.get(`/projects/user/${userId}`);
-    return res.data;
+export const GetProjectsByUser = async() => {
+    return await API.get('/projects/user');
 }
 
 export const AddProject = async(data) => {

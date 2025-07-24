@@ -5,6 +5,7 @@ import {Dashboard, UpdateUser} from "./pages/Dashboard";
 import Register from "./components/Register";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext"
+import Profile from "./pages/Profile";
 
 function App(){
   return(
@@ -15,6 +16,7 @@ function App(){
           <Route path="/register" element={<Register />}></Route>
           <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/update" element={<PrivateRoute><UpdateUser /></PrivateRoute>} />
+          <Route path="/profile" element={<Profile />}></Route>
         </Routes>
       </LayoutShell>
     </AuthProvider>

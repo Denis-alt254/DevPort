@@ -34,7 +34,7 @@
 
 @layer components{
     .layout{
-        @apply flex flex-col bg-gray-200
+        @apply flex flex-col bg-[#1e1e1e]
     }
     .header{
         @apply flex justify-between text-center m-5 bg-white

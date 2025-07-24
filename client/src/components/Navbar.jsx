@@ -11,6 +11,7 @@ export default function NavBar(){
                 <Link to='/register'>SignUp</Link>
                 <Link to='/dashboard'>Dashboard</Link>
                 <Link to='/update'>UpdateProfile</Link>
+                <Link to='/profile'>UpdateProfile</Link>
             </div>
         </div>
     )

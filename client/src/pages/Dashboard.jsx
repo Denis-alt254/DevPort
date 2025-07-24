@@ -29,7 +29,7 @@ export function Dashboard(){
             <h2>Welcome, {user?.username}</h2>
             <li>Skills: {user?.skills}</li>
             <ul>Endorsements: {user?.endorsements.map(endorsement => (
-                <li key={endorsement?._id}>
+                <li key={endorsement?._id}> 
                     {endorsement?.skill} ({endorsement?.count})
                 </li>
             ))}</ul>

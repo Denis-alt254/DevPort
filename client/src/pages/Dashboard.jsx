@@ -27,8 +27,14 @@ export function Dashboard(){
     return(
         <div className="login-box">
             <h2>Welcome, {user?.username}</h2>
-            <li>Skills: {user?.skills}</li>
-            <ul>Endorsements: {user?.endorsements.map(endorsement => (
+            <h2 className="text-center text-amber-600 m-6 text-3xl">Skills</h2>
+            <ul className="flex justify-between">{user?.skills.map(skill => (
+                <li key={skill?._id}>
+                    {skill?.name}
+                </li>
+            ))}</ul>
+            <h2 className="text-center text-3xl text-amber-600 m-6">Endorsements</h2>
+            <ul>{user?.endorsements.map(endorsement => (
                 <li key={endorsement?._id}> 
                     {endorsement?.skill} ({endorsement?.count})
                 </li>
@@ -70,6 +76,12 @@ export function UpdateUser({user}){
         }
     }
 
+    const handleSkillChange = (e, index) => {
+        const updateSkill = [...editUser.skills];
+        updateSkill[index].name = e.target.value;
+        setEditUser({ ...editUser, skills: updateSkill});
+    }
+ 
     return(
         <div>
             {editing? (
@@ -77,7 +89,7 @@ export function UpdateUser({user}){
                     {editUser && (
                         <div>
                             <input className="input" name="username" placeholder="username" value={editUser?.username || ''} onChange={handleChange} />
-                            <input className="input" name="skills" placeholder="skills" value={editUser?.skills || ''} onChange={handleChange} />
+                            <input className="input" name="skill" placeholder="skill" value={editUser?.skills || ''} onChange={handleSkillChange} />
                             <input className="input" name="endorsements" placeholder="endorsements" value={editUser?.endorsements || ''} onChange={handleChange} />
                         </div>
                     )}

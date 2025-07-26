@@ -4,9 +4,9 @@ export default function NavBar(){
     return(
         <div className='header'>
             <div className="logo">
-                <Link to='/home'>Logo</Link>
+                <Link to='/dashboard'>Logo</Link>
             </div>
-            <div className='flex justify-between gap-5 text-shadow-teal-300'>
+            <div className='nav-links'>
                 <Link to='/login'>Login</Link>
                 <Link to='/register'>SignUp</Link>
                 <Link to='/dashboard'>Dashboard</Link>

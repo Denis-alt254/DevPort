@@ -37,10 +37,10 @@
         @apply flex flex-col bg-[#1e1e1e]
     }
     .header{
-        @apply flex justify-between text-center m-5 bg-white
+        @apply flex justify-between text-center m-5 bg-white text-blue-700
     }
     .footer{
-        @apply flex text-center justify-center
+        @apply flex text-center justify-center 
     }
 }
 

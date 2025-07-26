@@ -6,12 +6,12 @@ export default function NavBar(){
             <div className="logo">
                 <Link to='/home'>Logo</Link>
             </div>
-            <div className='links'>
+            <div className='flex justify-between gap-5 text-shadow-teal-300'>
                 <Link to='/login'>Login</Link>
                 <Link to='/register'>SignUp</Link>
                 <Link to='/dashboard'>Dashboard</Link>
                 <Link to='/update'>UpdateProfile</Link>
-                <Link to='/profile'>UpdateProfile</Link>
+                <Link to='/profile'>Profile</Link>
             </div>
         </div>
     )

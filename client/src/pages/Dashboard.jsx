@@ -6,6 +6,7 @@ import { GetProjectsByUser } from "../services/projects";
 export function Dashboard(){
 
     const [user, setUser] = useState(null);
+    const [projects, setProjects] = useState(null);
 
     useEffect(() => {
         const fetchUser = async() => {
@@ -20,20 +21,37 @@ export function Dashboard(){
         fetchUser();
     }, []);
 
+    useEffect(() => {
+        const fetchProjects = async() => {
+            try {
+                const res = await GetProjectsByUser();
+                setProjects(res.data);
+            } catch (error) {
+                console.error({message: error.message});
+            }
+        }
+        fetchProjects();
+    }, [])
+
     //console.log(user);
     const handleFollowers = () => {
         console.log(<p>{user?.following}</p>)
     }
     
     return(
-        <div className="login-box">
-            <h2>Welcome, {user?.username}</h2>
-            <h2 className="text-center text-amber-600 m-6 text-3xl">Skills</h2>
-            <ul className="flex justify-between">{user?.skills.map(skill => (
-                <li key={skill?._id}>
-                    {skill?.name}
-                </li>
-            ))}</ul>
+        <div className="dashboard">
+            <div className="top-row">
+                <h2>Welcome, {user?.username}</h2>
+                <p>{user?.location}</p>
+            </div>
+            <div className="skills">
+                <p className="text-center text-amber-600 m-6 text-3xl">My Skills</p>
+                <ul className="flex justify-between">{user?.skills.map(skill => (
+                    <li key={skill?._id}>
+                        {skill?.name}
+                    </li>
+                ))}</ul>
+            </div>
             <h2 className="text-center text-3xl text-amber-600 m-6">Endorsements</h2>
             <ul>{user?.endorsements.map(endorsement => (
                 <li key={endorsement?._id}> 
@@ -41,6 +59,15 @@ export function Dashboard(){
                 </li>
             ))}</ul>
             {/* <button onClick={handleFollowers} className="button">Followers</button> */}
+            <div className="projects">
+                <h1>Projects</h1>
+                {projects?.map(project => (
+                    <div className="project" key={project._id}>
+                        <h2>{project?.title}</h2>
+                        <p>{project?.description}</p>
+                    </div> 
+                ))}
+            </div>
         </div>
     )
 }

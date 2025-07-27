@@ -9,8 +9,7 @@ export const GetProjectsByUser = async() => {
 }
 
 export const AddProject = async(data) => {
-    const res = await API.post('/projects/add', data);
-    return res.data;
+    return await API.post('/projects/add', data);
 }
 
 export const EditProject = async(id, data) => {

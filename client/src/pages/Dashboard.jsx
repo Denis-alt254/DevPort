@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { GetUser, UpdateProfile } from "../services/user"
 import { useState } from "react"
+import { GetProjectsByUser } from "../services/projects";
 
 export function Dashboard(){
 
@@ -47,6 +48,7 @@ export function Dashboard(){
 export function UpdateUser({user}){
     const [editUser, setEditUser] = useState({...user});
     const [editing, setEditing] = useState(true);
+    const [projects, setProjects] = useState(null);
 
     useEffect(() => {
         const fetchUser = async() => {
@@ -60,6 +62,18 @@ export function UpdateUser({user}){
         }
         fetchUser();
     }, []);
+
+    useEffect(() => {
+        const fetchProjects = async() => {
+            try {
+                const res = await GetProjectsByUser();
+                setProjects(res.data);
+            } catch (error) {
+                console.log({message: error.message});
+            }
+        }
+        fetchProjects();
+    }, [])
 
     const handleChange = (e) => {
         setEditUser({...editUser, [e.target.name]: e.target.value});
@@ -88,9 +102,27 @@ export function UpdateUser({user}){
                 <form className="login-box">
                     {editUser && (
                         <div>
+                            <p>Username:</p>
                             <input className="input" name="username" placeholder="username" value={editUser?.username || ''} onChange={handleChange} />
+                            <p>Bio:</p>
+                            <input className="input" name="bio" placeholder="bio" value={editUser?.bio || ''} onChange={handleChange} />
+                            <p>Role:</p>
+                            <input className="input" name="role" placeholder="role" value={editUser?.role || ''} onChange={handleChange} />
+                            <p>Location:</p>
+                            <input className="input" name="location" placeholder="location" value={editUser?.location || ''} onChange={handleChange} />
+                            <p>Skills:</p>
                             <input className="input" name="skill" placeholder="skill" value={editUser?.skills || ''} onChange={handleSkillChange} />
+                            <p>Endorsements:</p>
                             <input className="input" name="endorsements" placeholder="endorsements" value={editUser?.endorsements || ''} onChange={handleChange} />
+                            <p>Projects:</p>
+                            {projects?.map(project => (
+                                <div key={project?._id}>
+                                    <p>Title:</p>
+                                    <input name="project" value={project?.title} onChange={handleChange} />
+                                    <p>Description:</p>
+                                    <input name="description" value={project?.description} onChange={handleChange} />
+                                </div>
+                            ))}
                         </div>
                     )}
                     <button className="btn" onClick={handleUpdate}>Save</button>

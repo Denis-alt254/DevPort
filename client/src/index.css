@@ -39,6 +39,35 @@
   text-shadow: teal;
 }
 
+/* Dashboard */
+
+.top-row{
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #eff89f;
+}
+
+.skills, .endorsements{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.projects{
+  padding: 1rem;
+  background-color: #fff;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 2rem;
+}
+
+.project{
+  background-color: #6F8F63;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
 @layer base{
   Link{
     @apply caret-amber-300
@@ -70,7 +99,7 @@
 .layout{
   display: grid;
   grid-template-columns: auto 1fr;
-  background-color:#1e1e1e;
+  background-color:#e4e4e4;
 }
 
 .sidebar{

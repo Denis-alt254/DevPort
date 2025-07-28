@@ -44,23 +44,27 @@ export function Dashboard(){
                 <h2>Welcome, {user?.username}</h2>
                 <p>{user?.location}</p>
             </div>
-            <div className="skills">
-                <p className="text-center text-amber-600 m-6 text-3xl">My Skills</p>
-                <ul className="flex justify-between">{user?.skills.map(skill => (
+            <div className="flex p-2 justify-between bg-[#fff]">
+                <div className="skills">
+                <p className="text-amber-600 text-3xl">My Skills</p>
+                <ul className="">{user?.skills.map(skill => (
                     <li key={skill?._id}>
                         {skill?.name}
                     </li>
                 ))}</ul>
+                </div>
+                <div className="endorsements">
+                    <h2 className="text-3xl text-amber-600">Endorsements</h2>
+                    <ul>{user?.endorsements.map(endorsement => (
+                        <li key={endorsement?._id}> 
+                            {endorsement?.skill} ({endorsement?.count})
+                        </li>
+                    ))}</ul>
+                </div>
             </div>
-            <h2 className="text-center text-3xl text-amber-600 m-6">Endorsements</h2>
-            <ul>{user?.endorsements.map(endorsement => (
-                <li key={endorsement?._id}> 
-                    {endorsement?.skill} ({endorsement?.count})
-                </li>
-            ))}</ul>
             {/* <button onClick={handleFollowers} className="button">Followers</button> */}
+            <h1 className="text-center text-3xl text-amber-600 m-6">Projects</h1>
             <div className="projects">
-                <h1>Projects</h1>
                 {projects?.map(project => (
                     <div className="project" key={project._id}>
                         <h2>{project?.title}</h2>

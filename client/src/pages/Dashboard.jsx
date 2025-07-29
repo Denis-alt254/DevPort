@@ -1,12 +1,14 @@
 import { useEffect } from "react"
 import { GetUser, UpdateProfile } from "../services/user"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { GetProjectsByUser } from "../services/projects";
-
+import ProjectForm from "../components/ProjectForm";
 export function Dashboard(){
 
     const [user, setUser] = useState(null);
     const [projects, setProjects] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const formRef = useRef(null);
 
     useEffect(() => {
         const fetchUser = async() => {
@@ -31,7 +33,14 @@ export function Dashboard(){
             }
         }
         fetchProjects();
-    }, [])
+    }, []);
+
+    const handleClick = () => {
+        setShowForm(true);
+        setTimeout(() => {
+            formRef.current?.scrollIntoView({behavior: 'smooth'});
+        }, 100);
+    }
 
     //console.log(user);
     const handleFollowers = () => {
@@ -71,6 +80,14 @@ export function Dashboard(){
                         <p>{project?.description}</p>
                     </div> 
                 ))}
+                <div>
+                    <button className= 'btn' onClick={handleClick}>Add</button>
+                    {showForm && (
+                        <div ref={formRef} className="flex justify-center mt-2 text-center">
+                            <ProjectForm />
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )
@@ -86,7 +103,6 @@ export function UpdateUser({user}){
             try {
                 const res = await UpdateProfile();
                 setEditUser(res.data);
-                console.log(res.data);
             } catch (error) {
                 console.error({message: 'Error updating user'});
             }
@@ -120,12 +136,6 @@ export function UpdateUser({user}){
             console.error(`Error updating ${editUser?.username}`, error.message);
         }
     }
-
-    const handleSkillChange = (e, index) => {
-        const updateSkill = [...editUser.skills];
-        updateSkill[index].name = e.target.value;
-        setEditUser({ ...editUser, skills: updateSkill});
-    }
  
     return(
         <div>
@@ -142,9 +152,18 @@ export function UpdateUser({user}){
                             <p>Location:</p>
                             <input className="input" name="location" placeholder="location" value={editUser?.location || ''} onChange={handleChange} />
                             <p>Skills:</p>
-                            <input className="input" name="skill" placeholder="skill" value={editUser?.skills || ''} onChange={handleSkillChange} />
+                            {editUser?.skills?.map(skill => (
+                                <div className="input" name="skill" placeholder="skill" key={skill?._id} >
+                                    <input value={skill?.name || ''} onChange={handleChange}/>
+                                </div>
+                            ))}
                             <p>Endorsements:</p>
-                            <input className="input" name="endorsements" placeholder="endorsements" value={editUser?.endorsements || ''} onChange={handleChange} />
+                            {editUser?.endorsements?.map(endorsement => (
+                                <div className="input" name='endorsement' placeholder='endorsement' key={endorsement?._id}>
+                                    <input value={endorsement?.skill || ''} onChange={handleChange} />
+                                    <input value={endorsement?.count || ''} onChange={handleChange} />
+                                </div>
+                            ))}
                             <p>Projects:</p>
                             {projects?.map(project => (
                                 <div key={project?._id}>
@@ -165,7 +184,11 @@ export function UpdateUser({user}){
                         <li>Username: {editUser?.username}</li>
                         <li>Password: {editUser?.password}</li>
                         <li>Skills: {editUser?.skills}</li>
-                        <li>Endorsements: {editUser?.endorsements}</li>
+                        <ul>{editUser?.endorsements.map(endorsement => (
+                            <li key={endorsement?._id}> 
+                                {endorsement?.skill} ({endorsement?.count})
+                            </li>
+                        ))}</ul>
                     </ul>
                 </div>
             )}

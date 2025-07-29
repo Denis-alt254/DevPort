@@ -20,7 +20,7 @@ function ProjectForm(){
     }
     
     return(
-        <div>
+        <div className="login-box">
             <form onSubmit={handleNewProject}>
                 <input 
                 name="title"
@@ -52,7 +52,7 @@ function ProjectForm(){
                 value={project?.techStack}
                 onChange={handleFormChange}
                 />
-                {error && <p className="error-text">{error}</p>}
+                {/* {error && <p className="error-text">{error}</p>} */}
                 <button type="submit">Submit</button>
             </form>
         </div>

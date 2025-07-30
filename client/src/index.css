@@ -84,6 +84,9 @@
     .footer{
         @apply flex text-center justify-center 
     }
+    .filters{
+      @apply bg-gray-300 p-2 rounded-2xl
+    }
 }
 
 .btn{

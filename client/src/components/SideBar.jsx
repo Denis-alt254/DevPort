@@ -10,6 +10,7 @@ function SideBar(){
                 <Link to='/login'>Login</Link>
                 <Link to='/register'>SignUp</Link>
                 <Link to='/dashboard'>Dashboard</Link>
+                <Link to='/explore'>Explore</Link>
                 <Link to='/update'>UpdateProfile</Link>
                 <Link to='/profile'>Profile</Link>
             </div>

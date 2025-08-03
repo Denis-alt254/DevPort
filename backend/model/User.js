@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true, unique: true},
-    password: String,
+    password: {type: String, required: true},
     email: {
         type: String,
         required: true,
@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     }],
     endorsements: [{
         skill: {type: String, required: true},
-        count: {type: Number}
+        count: {type: Number, default: 0}
     }],
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]

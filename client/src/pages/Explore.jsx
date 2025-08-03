@@ -1,24 +1,28 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { GetUser } from "../services/user";
-import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 function Explore(){
 
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUser = async() => {
             try {
                 const res = await GetUser();
                 setUser(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error({message: error.message});
+                setLoading(false);
             }
         }
         fetchUser();
     },[]);
+
+    if (loading) return <Spinner />
 
     return(
         <div>

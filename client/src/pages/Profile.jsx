@@ -2,19 +2,23 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { GetUser } from "../services/user";
 import { GetProjectsByUser } from "../services/projects";
+import Spinner from "../components/Spinner";
 
 function Profile(){
 
     const [user, setUser] = useState(null);
     const [projects, setProjects] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUser  = async() => {
             try {
                 const res = await GetUser();
                 setUser(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error({message: error.message});
+                setLoading(false);
             }
         }
         fetchUser();
@@ -25,12 +29,16 @@ function Profile(){
             try {
                 const res = await GetProjectsByUser();
                 setProjects(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error({message: error.message});
+                setLoading(false);
             }
         }
         fetchProjects();
     }, []);
+
+    if (loading) return <Spinner />
 
     return(
         <div className="ProfilePage">

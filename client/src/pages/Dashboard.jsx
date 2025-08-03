@@ -3,11 +3,13 @@ import { GetUser, UpdateProfile } from "../services/user"
 import { useState, useRef } from "react"
 import { GetProjectsByUser } from "../services/projects";
 import ProjectForm from "../components/ProjectForm";
+import Spinner from "../components/Spinner";
 export function Dashboard(){
 
     const [user, setUser] = useState(null);
     const [projects, setProjects] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const [loading, setLoading] = useState(true);
     const formRef = useRef(null);
 
     useEffect(() => {
@@ -15,9 +17,10 @@ export function Dashboard(){
             try {
                 const res = await GetUser();
                 setUser(res.data);
-                //console.log(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error(error);
+                setLoading(false);
             }
         }
         fetchUser();
@@ -28,12 +31,16 @@ export function Dashboard(){
             try {
                 const res = await GetProjectsByUser();
                 setProjects(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error({message: error.message});
+                setLoading(false);
             }
         }
         fetchProjects();
     }, []);
+
+    if(loading) return <Spinner />
 
     const handleClick = () => {
         setShowForm(true);
@@ -97,14 +104,17 @@ export function UpdateUser({user}){
     const [editUser, setEditUser] = useState({...user});
     const [editing, setEditing] = useState(true);
     const [projects, setProjects] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUser = async() => {
             try {
                 const res = await UpdateProfile();
                 setEditUser(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error({message: 'Error updating user'});
+                setLoading(false);
             }
         }
         fetchUser();
@@ -115,12 +125,16 @@ export function UpdateUser({user}){
             try {
                 const res = await GetProjectsByUser();
                 setProjects(res.data);
+                setLoading(false);
             } catch (error) {
                 console.log({message: error.message});
+                setLoading(false);
             }
         }
         fetchProjects();
     }, [])
+
+    if(loading) return <Spinner />
 
     const handleChange = (e) => {
         setEditUser({...editUser, [e.target.name]: e.target.value});

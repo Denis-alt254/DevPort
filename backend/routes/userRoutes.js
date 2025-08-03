@@ -42,7 +42,7 @@ router.post('/register', async(req, res) => {
 
         res.status(200).json({message: "Login Successful.", token});
     } catch (error) {
-        console.error("Registration error", error);
+        console.error("Registration error: ", {message: error.message});
         res.status(500).json({error: "Internal Server Error."});
     }
 });

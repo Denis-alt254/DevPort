@@ -4,6 +4,8 @@ import { useState, useRef } from "react"
 import { GetProjectsByUser } from "../services/projects";
 import ProjectForm from "../components/ProjectForm";
 import Spinner from "../components/Spinner";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 export function Dashboard(){
 
     const [user, setUser] = useState(null);
@@ -105,6 +107,7 @@ export function UpdateUser({user}){
     const [editing, setEditing] = useState(true);
     const [projects, setProjects] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUser = async() => {
@@ -146,9 +149,14 @@ export function UpdateUser({user}){
             const res = await UpdateProfile(editUser);
             setEditUser(res.data);
             setEditing(false);
+            navigate('/dashboard', { state: { user: data.user } });
         } catch (error) {
             console.error(`Error updating ${editUser?.username}`, error.message);
         }
+    }
+
+    const successToast = () => {
+        toast.success("Profile Updated Successfully.");
     }
  
     return(
@@ -173,9 +181,9 @@ export function UpdateUser({user}){
                             ))}
                             <p>Endorsements:</p>
                             {editUser?.endorsements?.map(endorsement => (
-                                <div className="input" name='endorsement' placeholder='endorsement' key={endorsement?._id}>
-                                    <input value={endorsement?.skill || ''} onChange={handleChange} />
-                                    <input value={endorsement?.count || ''} onChange={handleChange} />
+                                <div key={endorsement?._id}>
+                                    <input className="input" name='skill' placeholder='skill' value={endorsement?.skill || ''} onChange={handleChange} />
+                                    <input className="input" name='skill' placeholder='skill' value={endorsement?.count || ''} onChange={handleChange} />
                                 </div>
                             ))}
                             <p>Projects:</p>
@@ -189,7 +197,8 @@ export function UpdateUser({user}){
                             ))}
                         </div>
                     )}
-                    <button className="btn" onClick={handleUpdate}>Save</button>
+                    <button className="btn" type="submit" onClick={handleUpdate} onSubmit={successToast}>Save</button>
+                    <ToastContainer position="top-right" autoClose={3000}/>
                 </form>
             ):(
                 <div>
@@ -197,7 +206,9 @@ export function UpdateUser({user}){
                     <ul>
                         <li>Username: {editUser?.username}</li>
                         <li>Password: {editUser?.password}</li>
-                        <li>Skills: {editUser?.skills}</li>
+                        <ul>Skills: {editUser?.skills?.map(skill => (
+                            <li key={skill?._id}>{skill?.name}</li>
+                        ))}</ul>
                         <ul>{editUser?.endorsements.map(endorsement => (
                             <li key={endorsement?._id}> 
                                 {endorsement?.skill} ({endorsement?.count})
